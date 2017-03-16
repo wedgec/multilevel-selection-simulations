@@ -1,5 +1,5 @@
 # multilevel-selection-simulations
-###Evolutionary Modeling to Investigate Multilevel Selection Theory as an Explanation for Altruism
+### Evolutionary Modeling to Investigate Multilevel Selection Theory as an Explanation for Altruism
 
 This is the repository for my Spring 2017 independent study with 
 Professor <a href="http://www.cs.brandeis.edu/~pollack/">Jordan Pollack</a>. 
