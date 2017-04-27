@@ -27,7 +27,7 @@ class Individual:
         reciprocally altruistic behavior. Value will modulate reproduction probability
     # self.extraReproductionChances: number of reproduction opportunities gained beyond 
         base number of reproduction opportunities (comes into play for methods 
-        playSocialGame and deathAndReproduction of class simulation.group.SocialGroup)
+        playSocialGame and deathAndReproduction of class simulatation.group.SocialGroup)
     # self.oppositeGenotype: initialized only for asexually reproducing individuals. Represents 
         the only other asexual genotype in play for the population (used for reproduction 
         when mutation rate is positive)
