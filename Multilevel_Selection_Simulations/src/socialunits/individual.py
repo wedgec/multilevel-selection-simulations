@@ -17,19 +17,20 @@ class Individual:
     Description: single organismal unit, smallest unit of social organization. Reproduction
         occurs within Individual class
        
-    Instance variables: 
-    # self.genotype: member of socialunits.enums.Genotype (A, S, AA, Aa, or aa)
-    # self.phenotype: member of socialunits.enums.Phenotype (altruistic or selfish)
+    Instance variables:
+    # self.genotype: member of socialunits.enums.Genotype (A, S, R, AA, Aa, or aa)
+    # self.phenotype: member of socialunits.enums.Phenotype (altruistic, selfish, or reciprocating)
     # self.reproduction: member of socialunits.enums.ReproductionType (sexual or asexual)
     # self.mutationRate: rate at which genotype mutations occur during 
         reproduction (range [0,1])
-    # self.altruismCostIncurred: cost incurred as the result of exhibiting altruistic 
-        behavior. Value will modulate reproduction probability
+    # self.prosocialCostIncurred: cost incurred as the result of exhibiting altruistic or 
+        reciprocally altruistic behavior. Value will modulate reproduction probability
     # self.extraReproductionChances: number of reproduction opportunities gained beyond 
         base number of reproduction opportunities (comes into play for methods 
         playSocialGame and deathAndReproduction of class simulation.group.SocialGroup)
     # self.oppositeGenotype: initialized only for asexually reproducing individuals. Represents 
-        the only other asexual genotype (used for reproduction when mutation rate is positive)
+        the only other asexual genotype in play for the population (used for reproduction 
+        when mutation rate is positive)
         
     Constructor method signature: __init__(self, genotype, reproduction, mutationRate=0.0)
         
@@ -45,7 +46,7 @@ class Individual:
         
         '''
         Parameters:
-        # genotype: member of socialunits.enums.Genotype (A, S, AA, Aa, or aa). Determines phenotype
+        # genotype: member of socialunits.enums.Genotype (A, S, R AA, Aa, or aa). Determines phenotype
         # reproduction: member of socialunits.enums.ReproductionType (sexual or asexual)
         # mutationRate: rate at which genotype mutations occur during 
             reproduction (range [0,1])
@@ -64,7 +65,7 @@ class Individual:
         self.genotype = genotype
         self.reproduction = reproduction
         self.mutationRate=mutationRate
-        self.altruismCostIncurred = 0.0
+        self.prosocialCostIncurred = 0.0
         self.extraReproductionChances = 0
         
         # self.phenotype, self.oppositeGenotype, set via private methods
@@ -79,13 +80,17 @@ class Individual:
             self.oppositeGenotype = Genotype.S
         elif genotype == Genotype.S:
             self.phenotype = Phenotype.selfish
-            self.oppositeGenotype = Phenotype.altruistic
+            self.oppositeGenotype = Genotype.A
+        elif self.genotype == Genotype.R:
+            self.phenotype = Phenotype.reciprocating
+            self.oppositeGenotype = Phenotype.selfish
         else:
-            raise RuntimeError('genotype must be socialunits.enums.Genotype.A or '
-                               'socialunits.enums.Genotype.S for asexual individuals')  
+            raise RuntimeError('genotype must be socialunits.enums.Genotype.A, '
+                               'socialunits.enums.Genotype.S, or socialunits.enums.Genotype.R '
+                               'for asexual individuals')  
         
     def _setInstanceVarsSexual(self, genotype):
-        raise RuntimeError('sexual Reproduction not implemented yet')
+        raise RuntimeError('sexual reproduction not implemented yet')
     
     def attemptReproduction(self, reproductionProbability=1.0, mate=None):
         
@@ -122,8 +127,8 @@ class Individual:
         opposite genotype
         '''
         
-        return (Individual(self.genotype, self.reproduction) if random() < (1-self.mutationRate)
-                else Individual(self.oppositeGenotype, self.reproduction))
+        return (Individual(self.genotype, self.reproduction, self.mutationRate) if random() < (1.0-self.mutationRate)
+                else Individual(self.oppositeGenotype, self.reproduction, self.mutationRate))
         
     def _reproduceSexual(self, mate):
         raise RuntimeError('Sexual Reproduction not implemented yet')
