@@ -19,22 +19,22 @@ from migration import randomRedistribution
 from time import time
 
 '''test every combination of target group size from 2 to 18 and extra reproduction probability from 
-0 to .6 in steps of .1.'''
+0 to .6 in steps of .01.'''
 
 # write column titles only on the first simulatation
 toWriteColumnTitles = True
 for targetGroupSize in range (2, 19):
-    for extraReproductionProbability in [prob / 10.0 for prob in range(0, 7, 1)]:
+    for extraReproductionProbability in [prob / 20.0 for prob in range(0, 13, 1)]:
         if targetGroupSize > 2 or extraReproductionProbability > 0:
             toWriteColumnTitles = False
         
         simulator = EvolutionSimulator(migrationFunction = randomRedistribution,
                               rounds=40, targetGroupSize=targetGroupSize, seedProportionProsocial = .6,
-                              reproduction=ReproductionType.asexual, costOfAltruism=.02, 
+                              reproduction=ReproductionType.asexual, costOfProsociality=.02, 
                               extraReproductionProbability=extraReproductionProbability, baseReproductionChances=1, 
                               baseReproductionProbability=.85, mutationRate=0,
-                              altruismType=ProsocialityType.strong, toWriteCSV=True, toPrintDataVecs=False, 
-                              fileName='testDataPhase1.csv', toWriteColumnTitles=toWriteColumnTitles)
+                              typeProsociality=ProsocialityType.strong, toWriteCSV=True, toPrintDataVecs=False, 
+                              fileName='experiment1_MLS_by_stochastic_dynamics.csv', toWriteColumnTitles=toWriteColumnTitles)
         
         # print length of time for each round--helps for identifying when population grows so much that the
         # simulatation algorithm becomes very slow
@@ -43,6 +43,7 @@ for targetGroupSize in range (2, 19):
         # run one round with given parameters
         simulator.runEvolutionarySimulation()
         
-        print('finished round: targetGroupSize = ' + str(targetGroupSize) + 
-              ', extraReproductionProbability = ' + str(extraReproductionProbability))
-        print('execution time = ' + str(time() - startTime) + '\n')
+        print('finished round:')
+        print(' targetGroupSize = ' + str(targetGroupSize))  
+        print(' extraReproductionProbability = ' + str(extraReproductionProbability))
+        print(' execution time = ' + str(time() - startTime) + '\n')
