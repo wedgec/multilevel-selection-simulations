@@ -20,6 +20,7 @@ from migration import randomRedistribution, biasedRedistribution, totalIsolation
 from itertools import chain
 import math, random, csv, threading
 from os.path import join
+import numpy
       
 class EvolutionSimulator:
     
@@ -78,6 +79,7 @@ class EvolutionSimulator:
     # groupCountsVec: list of counts of groups (how many groups in play each round)
     # populationCountsVec: list of counts of total population (how many total individuals each round)
     # prosocialProportionsVec: list of prosocial proportions (proportion of prosocial individuals each round)
+    # stdDeviationsVec: list of standard deviations (one per round) of prosocial proportions among all groups 
     # prefixParams: vector of numeric values that represent simulation parameters. prefixParams 
         gets concatenated with vectors of output data before vectors appended to CSV file. Initialized
         only if toWriteCSV or toPrintDataVecs is true
@@ -141,6 +143,7 @@ class EvolutionSimulator:
         self.groupCountsVec = []
         self.populationCountsVec = []
         self.prosocialProportionsVec = []
+        self.stdDeviationsVec = []
         if toWriteCSV or self.toPrintDataVecs:
             self.prefixParams = self._prefixParams()
             self.columnTitles = self._columnTitles()
@@ -191,7 +194,7 @@ class EvolutionSimulator:
         return [self.targetGroupSize, self.extraReproductionProbability, self.costOfProsociality, self.reproduction.value,
                 self.prosocialPhenotype.value, self.rounds, self.baseReproductionChances, self.baseReproductionProbability,
                 self.typeProsociality.value, getMigrationFunctionKey(self.migrationFunction), self.seedProportionProsocial,
-                self.reproduction.value, self.mutationRate, -10, -10, -10, -10, -10] 
+                self.mutationRate, -10, -10, -10, -10, -10] 
     
     def _columnTitles(self):
         
@@ -199,10 +202,10 @@ class EvolutionSimulator:
         
         roundTitles = ['starting state'] + ['Round ' + str(i+1) for i in range(self.rounds)]
         placeholderTitles = ['placeholder ' + str(i) for i in range(1,6)]
-        return ['dependent vars', 'target group size', 'benefit from prosociality', 'cost of prosociality', 
+        return ['dependent vars', 'target group size', 'extra reproduction probability', 'cost of prosociality', 
                 'reproduction type', 'prosocial phenotype', 'number of rounds', 'base reproduction rate', 
                 'base reproduction probability', 'prosociality type', 'migration type', 'seed proportion prosocial', 
-                'reproduction method', 'mutation rate'] + placeholderTitles + roundTitles 
+                'mutation rate'] + placeholderTitles + roundTitles 
           
     def _writeColumnTitles(self):
         
@@ -220,6 +223,7 @@ class EvolutionSimulator:
         self.prosocialProportionsVec = ['prosociality proportions:'] + self.prefixParams + self.prosocialProportionsVec
         self.populationCountsVec = ['population counts:'] + self.prefixParams + self.populationCountsVec
         self.groupCountsVec = ['groups counts:'] + self.prefixParams + self.groupCountsVec
+        self.stdDeviationsVec = ['standard deviations in prosocial proportions'] + self.prefixParams + self.stdDeviationsVec
         
     def _writeDataVecs(self):
         
@@ -230,6 +234,7 @@ class EvolutionSimulator:
             csvWriter.writerow(self.prosocialProportionsVec)
             csvWriter.writerow(self.populationCountsVec)
             csvWriter.writerow(self.groupCountsVec)
+            csvWriter.writerow(self.stdDeviationsVec)
     
     def _printDataVecs(self):
         
@@ -239,20 +244,27 @@ class EvolutionSimulator:
         print(self.prosocialProportionsVec)
         print(self.populationCountsVec)
         print(self.groupCountsVec)
+        print(self.stdDeviationsVec)
         
     def _updatePopulationData(self):
         
         '''called each round to append data from round to data vectors'''
         
-        # update counts
+        # update counts and make list of group's proportions to calculate std deviation
         self.populationCount = 0
         self.countProsocial = 0
         self.countSelfish = 0
+        prosocialProportionsAllGroups = []
         for group in self.groups:
             self.countProsocial += group.countProsocial
             self.countSelfish += group.countSelfish
             self.populationCount += group.size()
-        
+            try:
+                prosocialProportionsAllGroups.append(group.proportionProsocial())
+            except ZeroDivisionError:
+                # skip appending proportion of groups for which the population is zero
+                pass
+            
         # append to data vectors
         try:
             self.prosocialProportionsVec.append(self.countProsocial / float(self.populationCount))
@@ -261,7 +273,11 @@ class EvolutionSimulator:
             self.prosocialProportionsVec.append(-.1)
         self.populationCountsVec.append(self.populationCount)
         self.groupCountsVec.append(self.numGroups)
-    
+        if prosocialProportionsAllGroups:
+            self.stdDeviationsVec.append(numpy.std(prosocialProportionsAllGroups))
+        else:
+            # append with -1 in case of complete extinction of population
+            self.stdDeviationsVec.append(-1)
     def _mergeGroups(self):
         
         '''merge members of all groups into single population'''
@@ -390,12 +406,12 @@ if __name__ == '__main__':
     
     '''use main for testing/debugging, modifying parameters as desired'''
                          
-    simulator = EvolutionSimulator(numGroups=10, migrationFunction = totalIsolation, 
+    simulator = EvolutionSimulator(numGroups=10, migrationFunction = biasedRedistribution, 
                                     prosocialPhenotype=Phenotype.altruistic,
-                                    rounds=20, targetGroupSize=10, seedProportionProsocial = .02,
+                                    rounds=30, targetGroupSize=10, seedProportionProsocial = .6,
                                     reproduction=ReproductionType.asexual, costOfProsociality=0.00, 
-                                    extraReproductionProbability=.4, baseReproductionChances=1, 
-                                    baseReproductionProbability= 1.0, mutationRate=0.0,
-                                    typeProsociality=ProsocialityType.strong, tWriteCSV=False, toPrintDataVecs=True, 
+                                    extraReproductionProbability=.5, baseReproductionChances=1, 
+                                    baseReproductionProbability= .85, mutationRate=0.0,
+                                    typeProsociality=ProsocialityType.weak, tWriteCSV=False, toPrintDataVecs=True, 
                                     fileName='testData.csv')
     simulator.runEvolutionarySimulation()
