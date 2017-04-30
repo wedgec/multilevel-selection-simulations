@@ -20,7 +20,8 @@ The project is to design, run, and visualize evolutionary simulations in order t
 + *files*: plotExperiment1MLS_byStochasticDynamics.m, plotSxperiment2WeakSelectionControl.m,      plotExperiment3PhenotypeStratisfiedMigrationControl.m, plotExperiment4PhenotypeStratisfiedMigration.m, plotExperiment5RandomRedistribution.m, plotExperiment6Reciprocity.m, plotExperiments1Through3.m, plotExperiments4Through6.m, get21LineSpecs.m, omitProportionsOfLowPopulations.m
 
 **matlab_generated_plots (folder)** -- matlab-generated plots that visualize the experimental data, 3 for each experiment. The figures for experiments 1 through 3 are exactly parallel, just populated with different data, and likewise for the figures of experiments 4 through 6
-+ *files*: experiment1_figure1, experiment1_figure2, experiment1_figure3, experiment1_figure1, experiment2_figure2, experiment2_figure3, experiment2_figure1, experiment3_figure2, experiment3_figure3, experiment3_figure1, experiment4_figure2, experiment4_figure3, experiment4_figure1, experiment5_figure2, experiment5_figure3, experiment5_figure1, experiment5_figure2, experiment5_figure3,
++ *files*: experiment1_figure1, experiment1_figure2, experiment1_figure3, experiment2_figure1, experiment2_figure2, experiment2_figure3, experiment3_figure1, experiment3_figure2, experiment3_figure3, experiment4_figure1, experiment4_figure2, experiment4_figure3, experiment5_figure1, experiment5_figure2, experiment5_figure3, experiment6_figure1, experiment6_figure2, experiment6_figure3 
 
+**report.pdf (file)** -- conference-style report 
 
 
