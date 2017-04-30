@@ -1,9 +1,10 @@
 '''
 Module description: 
-    this script runs a number of evolutionary simulations testing different combinations
-    of two parameters: target group size, and extra reproduction probability. The hypothesis
-    under consideration is that as group size decreases, the fitness of the altruistic phenotype
-    relative to the population at large will increase as well.  
+    this script is just like experiment 3 except that the migration function
+    used is random redistribution instead of biased redistribution. The purpose
+    is to compare the two migration functions and to investigate the effects of 
+    parameters cost of prosociality and extra reproduction probability given a 
+    biased redistribution migration function.    
     
 Created: Spring 2017
 
@@ -18,23 +19,23 @@ from socialunits.enums import ReproductionType, ProsocialityType
 from migration import randomRedistribution
 from time import time
 
-'''test every combination of target group size from 2 to 21 and extra reproduction probability from 
-0 to .6 in steps of .05.'''
+'''test every combination of cost of prosociality from 0 to .2 in steps of .01 and 
+extra reproduction probability from 0 to .5 in steps of .05.'''
 
 # write column titles only on the first simulation
 toWriteColumnTitles = True
-for targetGroupSize in range (2, 22):
-    for extraReproductionProbability in [prob / 20.0 for prob in range(0, 13, 1)]:
-        if targetGroupSize > 2 or extraReproductionProbability > 0:
+for costOfProsociality in [prob / 100.0 for prob in range(0, 21)]:
+    for extraReproductionProbability in [prob / 20.0 for prob in range(0, 11)]:
+        if costOfProsociality > .01 or extraReproductionProbability > 0:
             toWriteColumnTitles = False
         
         simulator = EvolutionSimulator(migrationFunction = randomRedistribution,
-                              rounds=30, targetGroupSize=targetGroupSize, seedProportionProsocial = .53,
-                              reproduction=ReproductionType.asexual, costOfProsociality=.02, 
+                              rounds=30, targetGroupSize=10, seedProportionProsocial = .53,
+                              reproduction=ReproductionType.asexual, costOfProsociality=costOfProsociality, 
                               extraReproductionProbability=extraReproductionProbability, baseReproductionChances=1, 
                               baseReproductionProbability=1.0, mutationRate=0.0,
                               typeProsociality=ProsocialityType.strong, toWriteCSV=True, toPrintDataVecs=False, 
-                              fileName='experiment1_MLS_by_stochastic_dynamics.csv', toWriteColumnTitles=toWriteColumnTitles)
+                              fileName='experiment5_random_redistribution.csv', toWriteColumnTitles=toWriteColumnTitles)
         
         # print length of time for each round--helps for identifying when population grows so much that the
         # simulation algorithm becomes very slow
@@ -44,6 +45,6 @@ for targetGroupSize in range (2, 22):
         simulator.runEvolutionarySimulation()
         
         print('finished round:')
-        print(' targetGroupSize = ' + str(targetGroupSize))  
+        print(' costOfProsocialiy = ' + str(costOfProsociality))  
         print(' extraReproductionProbability = ' + str(extraReproductionProbability))
         print(' execution time = ' + str(time() - startTime) + '\n')
