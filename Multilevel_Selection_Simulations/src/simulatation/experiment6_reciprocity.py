@@ -19,7 +19,7 @@ from time import time
 from socialunits.enums import Phenotype
 
 '''test every combination of cost of prosociality from 0 to .2 in steps of .01 and 
-extra reproduction probability from 0 to .5 in steps of .05.'''
+extra reproduction probability from 0 to .4 in steps of .05.'''
 
 # write column titles only on the first simulatation
 toWriteColumnTitles = True
