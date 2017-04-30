@@ -16,7 +16,7 @@ class ReproductionType(Enum):
     
     '''
     Instances of socialunits.individual.Individual, socialunits.group.SocialGroup,
-    and simulatation.mls_simulatar.MLS_simulator are all associated with one or the 
+    and simulation.mls_simulatar.MLS_simulator are all associated with one or the 
     other reproduction type
     '''
     
