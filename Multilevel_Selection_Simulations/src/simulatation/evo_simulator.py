@@ -406,12 +406,12 @@ if __name__ == '__main__':
     
     '''use main for testing/debugging, modifying parameters as desired'''
                          
-    simulator = EvolutionSimulator(numGroups=10, migrationFunction = randomRedistribution, 
+    simulator = EvolutionSimulator(numGroups=10, migrationFunction = biasedRedistribution, 
                                     prosocialPhenotype=Phenotype.altruistic,
-                                    rounds=20, targetGroupSize=2, seedProportionProsocial = .5,
-                                    reproduction=ReproductionType.asexual, costOfProsociality=0.4, 
-                                    extraReproductionProbability=.4, baseReproductionChances=1, 
-                                    baseReproductionProbability= 1.0, mutationRate=0.0,
-                                    typeProsociality=ProsocialityType.strong, tWriteCSV=False, toPrintDataVecs=True, 
+                                    rounds=30, targetGroupSize=10, seedProportionProsocial = .6,
+                                    reproduction=ReproductionType.asexual, costOfProsociality=0.00, 
+                                    extraReproductionProbability=.5, baseReproductionChances=1, 
+                                    baseReproductionProbability= .85, mutationRate=0.0,
+                                    typeProsociality=ProsocialityType.weak, tWriteCSV=False, toPrintDataVecs=True, 
                                     fileName='testData.csv')
     simulator.runEvolutionarySimulation()
