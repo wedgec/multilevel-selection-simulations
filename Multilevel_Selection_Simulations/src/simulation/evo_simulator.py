@@ -66,7 +66,7 @@ class EvolutionSimulator:
         details
     # targetGroupSize: all groups begin each round at this size at least, but may be as high as 
         one less than double targetGroupSize. Group sizes are determined by, at the end of each round, 
-        taking as many groups as the the floor of the total population divided by targetGroupSize, and 
+        taking as many groups as the floor of the total population divided by targetGroupSize, and 
         dividing individuals between them as evenly as possible. So long as the total population greatly 
         exceeds, targetGroupSize, actual group sizes tend to equal targetGroupSize or targetGroupSize+1.
     # seedProportionProsocial: approximate proportion of prosocial individuals in starting population 
