@@ -64,8 +64,11 @@ class EvolutionSimulator:
         extra offspring with a probability each time of extraReproductionProbability  
     # typeProsociality: must be of type socialunits.enums.ProsocialityType. See class's docstring for 
         details
-    # targetGroupSize: all groups to be of this size or targetGroupSize+1, provided population size is 
-        greater than targetGroupSize
+    # targetGroupSize: all groups begin each round at this size at least, but may be as high as 
+        one less than double targetGroupSize. Group sizes are determined by, at the end of each round, 
+        taking as many groups as the the floor of the total population divided by targetGroupSize, and 
+        dividing individuals between them as evenly as possible. So long as the total population greatly 
+        exceeds, targetGroupSize, actual group sizes tend to equal targetGroupSize or targetGroupSize+1.
     # seedProportionProsocial: approximate proportion of prosocial individuals in starting population 
         (actual number of prosocial individuals equals the ceiling of seedProportionProsocial times the initial population size)
     # rounds: number of rounds of the simulation
