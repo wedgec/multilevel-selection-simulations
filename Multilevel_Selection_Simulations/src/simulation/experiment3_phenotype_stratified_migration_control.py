@@ -22,7 +22,7 @@ from migration import biasedRedistribution
 from time import time
 
 '''test every combination of target group size from 2 to 21 and extra reproduction probability from 
-0 to .6 in steps of .05.'''
+0 to .5 in steps of .05.'''
 
 # write column titles only on the first simulation
 toWriteColumnTitles = True
