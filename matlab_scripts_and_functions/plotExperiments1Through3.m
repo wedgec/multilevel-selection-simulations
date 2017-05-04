@@ -39,7 +39,7 @@ function plotExperiments1Through3(simulationData, startingStateIndex, numTrialsP
 
     % entire final column
     finalColumn = simulationData(:, end);
-    % keep every third value, thus just one value for each trial
+    % keep every fourth value, thus just one value for each trial
     prosocialProportions = finalColumn(1:4:end);
 
     % calculate vector of avg standard deviations of prosocial proportions
